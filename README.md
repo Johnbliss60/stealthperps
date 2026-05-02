@@ -1,4 +1,3 @@
-# StealthPerps 🔒
 ### The first private perpetuals DEX on Solana
 
 > Trade BTC/USD perps without revealing your position size, entry price, or liquidation level — ever.
@@ -178,4 +177,4 @@ This is only possible with Arcium's MPC network, which allows computation on enc
 
 Built for the **Arcium Hackathon 2025** — Privacy track.
 
-*No bots can hunt your liquidation price 🔒*
+*No bots can hunt your liquidation price 🔒
