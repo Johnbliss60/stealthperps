@@ -1,4 +1,3 @@
-# StealthPerps 🔒
 ### The first private perpetuals DEX on Solana
 
 > Trade BTC/USD perps without revealing your position size, entry price, or liquidation level — ever.
