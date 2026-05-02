@@ -1,46 +1,77 @@
-# Getting Started with Create React App
+# StealthPerps 🔒
+### The first private perpetuals DEX on Solana
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Trade BTC/USD perps without revealing your position size, entry price, or liquidation level — ever.
 
-## Available Scripts
+**Live Demo:** https://stealth-perps.vercel.app
+**Program:** D7KxfBv9wS3Wv317NRBH3WTHk6imwRWkhoyican9ngKz (Solana Devnet)
+**GitHub:** https://github.com/Johnbliss60/stealthperps
 
-In the project directory, you can run:
+## The Problem
 
-### `npm start`
+On every existing perps DEX — dYdX, GMX, Jupiter Perps — your position is fully public onchain:
+- Bots see your liquidation price and hunt it
+- Anyone can see your position size and entry price
+- MEV hunters front-run your trades
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## The Solution
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+StealthPerps uses Arcium MPC to keep your position completely private:
 
-### `npm test`
+1. You open a position — size, entry price and liquidation price encrypted client-side
+2. Arcium MPC nodes compute liquidation checks on encrypted data — nobody sees it
+3. Only PnL is revealed — on close, only the final result is decrypted onchain
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## What Stays Private
 
-### `npm run build`
+| Data | Visibility |
+|------|-----------|
+| Position size | Always encrypted |
+| Entry price | Always encrypted |
+| Liquidation price | Always encrypted |
+| Unrealized PnL | Always encrypted |
+| Final PnL | Revealed only on close |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Deployed Contracts
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+| | |
+|-|-|
+| Program ID | D7KxfBv9wS3Wv317NRBH3WTHk6imwRWkhoyican9ngKz |
+| Network | Solana Devnet |
+| MXE Account | DkUmUtcW3odwtNRp6AcMQxmHJDu7m1Tgm4EBrWMianAW |
+| Arcium Cluster Offset | 456 |
+| check_liquidation CompDef | 8deLTW1qo1CPtfN1Ba2j9EYGSnVVHowCE4FpyWtq4eLy |
+| close_position CompDef | 14GXw7H3FGvJPLamvZbmbbrJjqfJ3Mx2kM2q1uEuv96p |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Verify on Solana Explorer:
+https://explorer.solana.com/address/D7KxfBv9wS3Wv317NRBH3WTHk6imwRWkhoyican9ngKz?cluster=devnet
 
-### `npm run eject`
+Sample encrypted computation transaction:
+https://explorer.solana.com/tx/4hUvRsHBUj9BkCiqBh9zWqTWMrVTWBeiheshpZqn7z6mNEHzFQx9JuDT3fBpY11rAgFqRGvVVJ4eUQZjJFS5rQUc?cluster=devnet
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Tech Stack
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Smart Contract: Anchor 0.32.1 on Solana
+- Privacy: Arcium MPC SDK 0.9.7
+- Frontend: React + TypeScript
+- Wallet: Phantom
+- Deployment: Vercel
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Local Setup
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+git clone https://github.com/Johnbliss60/stealthperps.git
+cd stealthperps
+arcium build
 
-## Learn More
+export ARCIUM_CLUSTER_OFFSET=456
+export ANCHOR_WALLET=~/.config/solana/id.json
+export ANCHOR_PROVIDER_URL="https://api.devnet.solana.com"
+anchor test --skip-local-validator --skip-deploy --provider.cluster devnet
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+cd frontend && npm install && npm start
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Built For
+
+Arcium Hackathon 2025 — Privacy track
+
+No bots can hunt your liquidation price
